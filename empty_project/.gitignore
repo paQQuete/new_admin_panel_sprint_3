@@ -1,0 +1,4 @@
+/.env
+/host_volume/
+/app/config/.env
+/pg_to_sql_loaddata/.env
