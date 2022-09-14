@@ -5,8 +5,8 @@ from typing import *
 import psycopg2
 from psycopg2.extras import DictCursor
 
-import pg_sql
-from ..utils.backoff import backoff
+from utils import sql
+from utils.backoff import backoff
 
 
 @contextmanager
@@ -29,7 +29,7 @@ class PgExtract:
         self.cursor = self.conn.cursor()
 
     @backoff()
-    def get_last_modified(self) -> Dict[List]:
+    def get_last_modified(self) -> Dict:
         """
         Метод для получения наибольшей даты обновления всех объектов
         Возвращает максимальное значение поля modified из таблиц:
@@ -37,7 +37,7 @@ class PgExtract:
         - genre
         - film_work
         """
-        self.cursor.execute(pg_sql.PG_LAST_MODIFIED)
+        self.cursor.execute(sql.PG_LAST_MODIFIED)
         return dict(self.cursor.fetchone()).get("modified")
 
     @backoff()
@@ -49,7 +49,7 @@ class PgExtract:
         для каждого кинопроизведения возвращается максимальная дата обновления.
         :param last_modified: дата, используется для фильтрации выборки.
         """
-        self.cursor.execute(pg_sql.PG_MOVIES_TO_UPDATE, {"date": last_modified})
+        self.cursor.execute(sql.PG_MOVIES_TO_UPDATE, {"date": last_modified})
         return [dict(row) for row in self.cursor.fetchall()]
 
     @backoff()
@@ -57,7 +57,7 @@ class PgExtract:
         """ "
         Запрос всех кинопроизведений (данные в курсоре)
         """
-        self.cursor.execute(pg_sql.PG_SELECT_ALL)
+        self.cursor.execute(sql.PG_SELECT_ALL)
 
     @backoff()
     def select_movies(self, ids: tuple) -> None:
@@ -65,7 +65,7 @@ class PgExtract:
         Запрос кинопроизведений по id(данные в курсоре)
         :param ids: кортеж идентификаторов кинопроизведений
         """
-        self.cursor.execute(pg_sql.PG_SELECT_BY_ID, (ids))
+        self.cursor.execute(sql.PG_SELECT_BY_ID, (ids))
 
     @backoff()
     def extract_batch(self, batch_size=100) -> List[Dict]:

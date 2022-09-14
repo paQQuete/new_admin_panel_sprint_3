@@ -2,7 +2,7 @@ FROM python:3.10
 
 WORKDIR /opt/app
 COPY . .
-RUN chmod 777 /opt/app/entrypoint.sh
+RUN chmod 777 /opt/app/entrypoint.sh.sh
 
 RUN apt -y update \
     && apt -y install netcat

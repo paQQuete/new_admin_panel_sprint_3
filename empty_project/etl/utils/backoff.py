@@ -3,6 +3,8 @@ from functools import wraps
 
 from psycopg2 import OperationalError
 
+from utils.logger import logger
+
 def backoff(
     exception=OperationalError,
     message="Database connection error",

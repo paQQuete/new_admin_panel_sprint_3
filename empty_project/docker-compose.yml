@@ -37,7 +37,7 @@ services:
 #    depends_on:
 #      - db
 
-  etl:
+  es:
     image: elasticsearch:7.7.0
     environment:
       - ES_JAVA_OPTS=-Xms4096m -Xmx4096m
@@ -46,6 +46,14 @@ services:
       - db
     ports:
       - '9200:9200'
+
+  etl:
+    build: ./etl
+    env_file:
+      - ./etl/.env
+    depends_on:
+      - es
+
 
 volumes:
   postgres_data:
