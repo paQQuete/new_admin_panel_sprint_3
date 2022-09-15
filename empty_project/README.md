@@ -15,9 +15,9 @@ This repository includes 5 services:
  - create file `empty_project/pg_to_sql_loaddata/.env`
  - create file `empty_project/.env`
  - fill these files
- - ```sh
-   cd empty_project && sudo docker-compose up --build
-   ```
+```sh
+cd empty_project && sudo docker-compose up --build
+```
 
 ## empty_project/app/config/.env:
  - DB_NAME=`<Database name>`
