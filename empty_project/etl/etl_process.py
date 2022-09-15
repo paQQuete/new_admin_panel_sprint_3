@@ -1,6 +1,5 @@
 import os
 import json
-import os
 import time
 import sys
 from pathlib import Path
@@ -37,7 +36,7 @@ def create_es_index(
         index_name: str,
         index_schema: str,
 ) -> None:
-    """Функция для создания индекса, если уже не существует индекса с таким именем"""
+    """Функция для создания индекса, если его еще не существует"""
     if not es_client.indices.exists(index=index_name):
         with open(index_schema) as f:
             schema = json.loads(f.read())
