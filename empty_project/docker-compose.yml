@@ -29,7 +29,7 @@ services:
       - web
     ports:
       - "80:80"
-
+#
 #  sql2pg:
 #    build: ./pg_to_sql_loaddata
 #    env_file:

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from elasticsearch import ConnectionError, Elasticsearch, helpers
 from contextlib import contextmanager
 from psycopg2.extensions import connection as _connection
@@ -6,6 +8,7 @@ from utils.logger import logger
 from utils import state
 from utils.backoff import backoff
 from . import extract
+
 
 @contextmanager
 def es_conn_context(url: str):
@@ -19,6 +22,7 @@ def es_conn_context(url: str):
 
     es = connect(url)
     yield es
+
 
 def load_to_es(
         es_client: Elasticsearch,
@@ -59,8 +63,11 @@ def load_to_es(
             last_modified = str(max(row["modified"] for row in movies))
             logger.info("last_modified = {}".format(last_modified))
 
-    # Сохраняем новое значения состояния в файл
-    curr_state.set_state("modified", last_modified)
+    # Сохраняем новое значения состояния в файл, бросаем исключение если значение None или False, чтобы не писать неправильное состояние в файл
+    if last_modified and last_modified != str(None):
+        curr_state.set_state("modified", last_modified)
+    else:
+        raise Exception(f''''modified' state is not True, we don't save the state to {file_storage.file_path}''')
 
 
 def load_batch(
@@ -76,8 +83,9 @@ def load_batch(
         logger.info(f"Extracting batch of {batch_size}")
         data = pg_extractor.extract_batch(batch_size)
         if not data:
-            logger.info("postgres database don't have any data")
+            logger.info("PG cursor is empty")
             break
+
         def gendata():
             """
             Получение генератора json для использования в пакетной загрузке в Elasticsearch

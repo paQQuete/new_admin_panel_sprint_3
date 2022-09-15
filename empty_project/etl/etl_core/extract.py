@@ -38,18 +38,21 @@ class PgExtract:
         - film_work
         """
         self.cursor.execute(sql.PG_LAST_MODIFIED)
-        return dict(self.cursor.fetchone()).get("modified")
+        return dict(self.cursor.fetchone()).get("updated_at")
 
     @backoff()
     def get_movies_to_update(self, last_modified: datetime) -> List[Dict]:
         """Запрос и получение списка идентификаторов кинопроизведений для обновления.
-        Возвращает кинопроизведения, в которых дата одновления (modified_at) одноой или нескольких
+        Возвращает кинопроизведения, в которых дата одновления (updated_at) одноой или нескольких
         записей person, genre, film_work - больше параметра last_modified
         При наличии обновлений в нескольких объектах кинопроизведения (например, в связанных genre и person)
         для каждого кинопроизведения возвращается максимальная дата обновления.
         :param last_modified: дата, используется для фильтрации выборки.
         """
-        self.cursor.execute(sql.PG_MOVIES_TO_UPDATE, {"date": last_modified})
+        if last_modified != None:
+            self.cursor.execute(sql.PG_MOVIES_TO_UPDATE, {"date": last_modified})
+        else:
+            self.cursor.execute(sql.PG_MOVIES_TO_UPDATE)
         return [dict(row) for row in self.cursor.fetchall()]
 
     @backoff()

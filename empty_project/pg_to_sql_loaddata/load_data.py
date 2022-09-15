@@ -65,11 +65,12 @@ def main(sqlcur: sqlite3.Connection.cursor, pg__cur: psycopg2.extras.DictCursor,
 
 
 if __name__ == '__main__':
-    env_path = Path('.') / '.env'
+    load_dotenv()
+    env_path = Path('.')/'.env'
     load_dotenv(dotenv_path=env_path)
-    DSL: dict = {'dbname': os.getenv('dbname'), 'user': os.getenv('user'), 'password': os.getenv('password'),
-                 'host': os.getenv('host'),
-                 'port': os.getenv('port')}
+    DSL: dict = {'dbname': os.getenv('DBNAME'), 'user': os.getenv('DBUSER'), 'password': os.getenv('PASSWORD'),
+                 'host': os.getenv('HOST'),
+                 'port': os.getenv('PORT')}
     PG_TARGET_SCHEMA: str = 'content'
     BATCH_SIZE: int = 100
 
