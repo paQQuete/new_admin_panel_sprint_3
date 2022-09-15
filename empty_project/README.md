@@ -37,8 +37,7 @@ cd empty_project && sudo docker-compose up --build
 - ES_HOST=`<Elasticsearch host (hostname or IP address)>`
 - ES_PORT=`<Elasticsearch port>`
 - ELASTIC_URL=`<Elasticsearch full URL, (http://elasticsearch_host:port)>`
--
-LOOP_TIMEOUT=`<Main process timeout running (launch every ... seconds). It is recommended to set the value to more than
+- LOOP_TIMEOUT=`<Main process timeout running (launch every ... seconds). It is recommended to set the value to more than
 60 seconds>`
 
 ## empty_project/pg_to_sql_loaddata/.env:
