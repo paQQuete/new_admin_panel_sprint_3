@@ -27,11 +27,11 @@ def es_conn_context(url: str):
 def load_to_es(
         es_client: Elasticsearch,
         pg_connection: _connection,
+        STATE_STORAGE: str,
+        BATCH_SIZE: int,
+        INDEX_NAME: str
 ) -> None:
     """Основной метод для инкрементальной миграции данных из БД Postgres в индекс movies в Elasticsearch"""
-    INDEX_NAME = "movies"
-    STATE_STORAGE = "state_storage.json"
-    BATCH_SIZE = 100
 
     pg_extractor = extract.PgExtract(pg_connection)
 

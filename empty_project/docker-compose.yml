@@ -29,13 +29,13 @@ services:
       - web
     ports:
       - "80:80"
-#
-#  sql2pg:
-#    build: ./pg_to_sql_loaddata
-#    env_file:
-#      - ./pg_to_sql_loaddata/.env
-#    depends_on:
-#      - db
+
+  sql2pg:
+    build: ./pg_to_sql_loaddata
+    env_file:
+      - ./pg_to_sql_loaddata/.env
+    depends_on:
+      - db
 
   es:
     image: elasticsearch:7.7.0
@@ -44,13 +44,13 @@ services:
       - discovery.type=single-node
     depends_on:
       - db
-    ports:
-      - '9200:9200'
+    expose:
+      - '9200'
 
   etl:
     build: ./etl
     env_file:
-      - ./etl/.env
+      - etl/config/.env
     depends_on:
       - es
 
