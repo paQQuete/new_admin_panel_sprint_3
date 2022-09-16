@@ -19,6 +19,13 @@ This repository includes 5 services:
 cd empty_project && sudo docker-compose up --build
 ```
 
+if needed to transfer data from sqlite to postgres:
+```sh
+sudo docker -it exec empty_project_sql2pg_1 sh 
+```
+in container shell: ```sh python load_data.py```
+
+
 ## empty_project/app/config/.env:
  - DB_NAME=`<Database name>`
  - DB_USER=`<Database user>`

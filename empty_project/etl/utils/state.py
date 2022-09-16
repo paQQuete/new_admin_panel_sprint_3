@@ -1,8 +1,7 @@
 import abc
 import json
 from pathlib import Path
-from typing import *
-
+from typing import Any
 
 class BaseStorage:
     @abc.abstractmethod
@@ -19,7 +18,7 @@ class BaseStorage:
 class JsonFileStorage(BaseStorage):
     """Класс для реализации сохранения и получения состояния из хранилища в json файле"""
 
-    def __init__(self, file_path: Optional[str] = None):
+    def __init__(self, file_path: str = None):
         self.file_path = file_path
         file = Path(self.file_path)
         file.touch(exist_ok=True)

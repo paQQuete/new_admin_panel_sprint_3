@@ -1,6 +1,5 @@
 from contextlib import contextmanager
 from datetime import datetime
-from typing import *
 
 import psycopg2
 from psycopg2.extras import DictCursor
@@ -29,7 +28,7 @@ class PgExtract:
         self.cursor = self.conn.cursor()
 
     @backoff()
-    def get_last_modified(self) -> Dict:
+    def get_last_modified(self) -> dict:
         """
         Метод для получения наибольшей даты обновления всех объектов
         Возвращает максимальное значение поля modified из таблиц:
@@ -41,7 +40,7 @@ class PgExtract:
         return dict(self.cursor.fetchone()).get("updated_at")
 
     @backoff()
-    def get_movies_to_update(self, last_modified: datetime) -> List[Dict]:
+    def get_movies_to_update(self, last_modified: datetime) -> list[dict]:
         """Запрос и получение списка идентификаторов кинопроизведений для обновления.
         Возвращает кинопроизведения, в которых дата одновления (updated_at) одноой или нескольких
         записей person, genre, film_work - больше параметра last_modified
@@ -49,7 +48,7 @@ class PgExtract:
         для каждого кинопроизведения возвращается максимальная дата обновления.
         :param last_modified: дата, используется для фильтрации выборки.
         """
-        if last_modified != None:
+        if last_modified is not None:
             self.cursor.execute(sql.PG_MOVIES_TO_UPDATE, {"date": last_modified})
         else:
             self.cursor.execute(sql.PG_MOVIES_TO_UPDATE)
@@ -71,7 +70,7 @@ class PgExtract:
         self.cursor.execute(sql.PG_SELECT_BY_ID, (ids))
 
     @backoff()
-    def extract_batch(self, batch_size=100) -> List[Dict]:
+    def extract_batch(self, batch_size=100) -> list[dict]:
         """
         Возвращение пачки данных из курсора
         :param batch_size: размер пачки данных

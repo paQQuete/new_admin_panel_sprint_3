@@ -6,8 +6,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     env_file:
       - ./.env
-    expose:
-      - '5432'
+    ports:
+      - '5432:5432'
   web:
     build: ./app
     env_file:
@@ -29,13 +29,13 @@ services:
       - web
     ports:
       - "80:80"
-#
-#  sql2pg:
-#    build: ./pg_to_sql_loaddata
-#    env_file:
-#      - ./pg_to_sql_loaddata/.env
-#    depends_on:
-#      - db
+
+  sql2pg:
+    build: ./pg_to_sql_loaddata
+    env_file:
+      - ./pg_to_sql_loaddata/.env
+    depends_on:
+      - db
 
   es:
     image: elasticsearch:7.7.0
@@ -50,7 +50,7 @@ services:
   etl:
     build: ./etl
     env_file:
-      - ./etl/.env
+      - etl/config/.env
     depends_on:
       - es
 
