@@ -6,7 +6,7 @@ from elasticsearch import Elasticsearch
 from utils.logger import logger
 from etl_core import load, extract
 import utils
-from config import config
+from config.config import *
 
 
 def create_es_index(
@@ -23,13 +23,12 @@ def create_es_index(
 
 
 if __name__ == "__main__":
-    appenv = config.initvar()
 
     while True:
-        with load.es_conn_context(appenv['ELASTIC_URL']) as es, extract.pg_conn_context(appenv['dsn']) as pg:
-            if not es.indices.exists(appenv['INDEX_NAME']):
-                create_es_index(es, appenv['INDEX_NAME'], appenv['INDEX_SCHEMA'])
-            load.load_to_es(es, pg, STATE_STORAGE=appenv['STATE_STORAGE'], BATCH_SIZE=appenv['BATCH_SIZE'],
-                            INDEX_NAME=appenv['INDEX_NAME'])
-            logger.info(f"Next sync attempt in {appenv['LOOP_TIMEOUT']} seconds.")
-            time.sleep(appenv['LOOP_TIMEOUT'])
+        with load.es_conn_context(ELASTIC_URL) as es, extract.pg_conn_context(dsn) as pg:
+            if not es.indices.exists(INDEX_NAME):
+                create_es_index(es, INDEX_NAME, INDEX_SCHEMA)
+            load.load_to_es(es, pg, STATE_STORAGE=STATE_STORAGE, BATCH_SIZE=BATCH_SIZE,
+                            INDEX_NAME=INDEX_NAME)
+            logger.info(f"Next sync attempt in {LOOP_TIMEOUT} seconds.")
+            time.sleep(LOOP_TIMEOUT)
