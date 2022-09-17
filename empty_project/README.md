@@ -7,7 +7,7 @@ This repository includes 5 services:
 - nginx as web server,
 - elasticsearch as fulltext search, 
 - etl as extract-transform-load service for continuous filling all data from database to search index
-- extra service for transform SQLite DB to Postgres DB (for use this - uncomment service in `docker-compose.yml`)
+- extra service for transform SQLite DB to Postgres DB
 
 ## Running:
  - create file`empty_project/app/config/.env`
@@ -21,7 +21,7 @@ cd empty_project && sudo docker-compose up --build
 
 if needed to transfer data from sqlite to postgres:
 ```sh
-sudo docker -it exec empty_project_sql2pg_1 sh 
+sudo docker exec -it empty_project_sql2pg_1 sh 
 ```
 in container shell: ```sh python load_data.py```
 
